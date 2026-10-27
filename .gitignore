@@ -8,3 +8,6 @@ data/
 *.db-shm
 *.db-wal
 coverage/
+preview-receipt.encrypted.json
+
+.vercel
