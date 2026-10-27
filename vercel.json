@@ -3,7 +3,7 @@
   "framework": null,
   "buildCommand": "npm run build",
   "functions": {
-    "api/index.cjs": {
+    "api/index.js": {
       "includeFiles": "dist/database/migrations/**",
       "maxDuration": 30
     }
