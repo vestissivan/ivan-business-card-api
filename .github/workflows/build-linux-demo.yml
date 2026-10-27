@@ -1,0 +1,38 @@
+name: Package Linux review demo
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - run: npm prune --omit=dev --no-audit --no-fund
+      - run: node scripts/package-preview.cjs
+      - name: Smoke test the packaged native Linux function
+        shell: bash
+        env:
+          VERCEL: "1"
+        run: |
+          node -e "require('node:http').createServer(require('./.vercel/output/functions/index.func/index.js')).listen(3000)" &
+          server=$!
+          trap 'kill "$server"' EXIT
+          for n in $(seq 1 20); do
+            if curl -fsS http://localhost:3000/health; then break; fi
+            sleep 1
+          done
+          node scripts/smoke-test.cjs
+      - run: tar -czf linux-preview.tar.gz .vercel/output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-preview
+          path: linux-preview.tar.gz
+          retention-days: 3
