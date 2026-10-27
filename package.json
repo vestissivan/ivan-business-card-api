@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "Read-only NestJS GraphQL business card with Prisma and automatic SQLite initialization",
-  "engines": { "node": "24.x" },
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "build": "prisma generate && tsc && node scripts/copy-assets.cjs",
     "start": "node dist/main.js",
@@ -31,6 +33,7 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.0",
+    "@vercel/nft": "^1.11.0",
     "prisma": "7.10.1",
     "supertest": "^7.1.4",
     "typescript": "5.9.3"
